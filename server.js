@@ -62,7 +62,7 @@ function getSession(req, res) {
 var userService = require('./services/user.service.server');
 userService(app);
 
-// require('./services/section.service.server')(app);
+require('./services/section.service.server')(app);
 // require('./services/quiz.service.server')(app);
 
 app.listen(3000);

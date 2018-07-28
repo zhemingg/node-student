@@ -39,7 +39,13 @@ module.exports = function (app) {
     }
 
     function profile(req, res) {
-        res.send(req.session['currentUser']);
+        var user = req.session['currentUser']
+        if (user) {
+            res.send(req.session['currentUser']);
+        } else {
+            res.json({error: 'Please log in'})
+        }
+
     }
 
     function createUser(req, res) {

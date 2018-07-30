@@ -2,6 +2,8 @@ module.exports = function (app) {
 
     app.post('/api/course/:courseId/section', createSection);
     app.get('/api/course/:courseId/section', findSectionsForCourse);
+    app.put('/api/section/:sectionId', updateSection);
+    app.delete('/api/section/:sectionId', deleteSection);
 
 
     var sectionModel = require('../models/section/section.model.server');
@@ -22,5 +24,17 @@ module.exports = function (app) {
             .then(function (section) {
                 res.json(section);
             })
+    }
+
+    function updateSection (req, res) {
+        const section = req.body;
+        sectionModel.updateSection(section)
+            .then(results => res.json(results));
+    }
+
+    function deleteSection(req, res) {
+        const sectionId = req.params['sectionId'];
+        sectionModel.deleteSection(sectionId)
+            .then(results => res.json(results));
     }
 };

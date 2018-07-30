@@ -30,10 +30,24 @@ function findSectionById (sectionId) {
     return sectionModel.findById(sectionId);
 }
 
+function updateSection (newSection) {
+    return sectionModel.update({
+        _id: newSection._id,
+    }, {
+        $set: newSection,
+    })
+}
+
+function deleteSection (sectionId) {
+    return sectionModel.remove({_id: sectionId});
+
+}
 module.exports = {
     createSection: createSection,
     findSectionsForCourse: findSectionsForCourse,
     decrementSectionSeats: decrementSectionSeats,
     incrementSectionSeats: incrementSectionSeats,
-    findSectionById: findSectionById
+    findSectionById: findSectionById,
+    updateSection: updateSection,
+    deleteSection: deleteSection,
 };

@@ -67,4 +67,4 @@ enrollmentService(app);
 
 require('./services/section.service.server')(app);
 
-app.listen(3000 || process.env.MONGODB_URI);
+app.listen(3000 || process.env.PORT);

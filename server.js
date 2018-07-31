@@ -1,7 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/angular-student-data');
+mongoose.connect('mongodb://localhost/angular-student-data' || process.env.MONGODB_URI);
 
 
 var app = express();
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin",
-        "http://localhost:4200");
+        "https://zhemingg-angular-student.herokuapp.com");
     res.header("Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods",
@@ -67,4 +67,4 @@ enrollmentService(app);
 
 require('./services/section.service.server')(app);
 
-app.listen(3000);
+app.listen(3000 || process.env.MONGODB_URI);

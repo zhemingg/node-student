@@ -8,6 +8,7 @@ var enrollmentSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserModel'
     },
+    courseId: String,
     grade: String
 }, {collection: 'enrollments'});
 module.exports = enrollmentSchema;

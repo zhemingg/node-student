@@ -31,6 +31,10 @@ function updateUser(user) {
     );
 }
 
+function deleteUser(user) {
+    return userModel.remove(user)
+}
+
 var api = {
     createUser: createUser,
     findAllUsers: findAllUsers,
@@ -38,6 +42,7 @@ var api = {
     findUserByCredentials: findUserByCredentials,
     findUserByUsername: findUserByUsername,
     updateUser: updateUser,
+    deleteUser: deleteUser
 };
 
 module.exports = api;

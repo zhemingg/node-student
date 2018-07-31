@@ -1,14 +1,17 @@
 module.exports = function (app) {
     app.get('/api/user', findAllUsers);
     app.get('/api/user/:userId', findUserById);
-    app.post('/api/user', createUser);
+    app.post('/api/register', createUser);
     app.get('/api/profile', profile);
     app.post('/api/logout', logout);
     app.post('/api/login', login);
     app.get('/api/users/:username', findUserByUsername);
     app.put('/api/profile', updateUser);
+    app.delete('/api/profile', deleteUser);
 
     var userModel = require('../models/user/user.model.server');
+    var enrollmentModel = require('../models/enrollment/enrollment.model.server');
+    var sectionModel = require('../models/section/section.model.server');
 
     function login(req, res) {
         var credentials = req.body;
@@ -84,5 +87,28 @@ module.exports = function (app) {
             })
 
         // res.json(newUser);
+    }
+
+    function deleteUser(req, res) {
+        var currentUser = req.session['currentUser'];
+        if (!currentUser) {
+            res.json({error: 'Please log in'});
+        } else {
+            let enrolledSections = [];
+            enrollmentModel.findSectionsForStudent(currentUser._id)
+                .then(sections => enrolledSections = sections)
+                .then(() => {
+                    enrollmentModel.deleteEnrollmnetForUser(currentUser._id)
+                        .then(() => userModel.deleteUser(currentUser))
+                })
+                .then(() => {
+                    // console.log(enrolledSections);
+                    enrolledSections.forEach(enrollment => {
+                        sectionModel.incrementSectionSeats(enrollment.section._id)
+                            .then(response => console.log(response));
+                    })
+                }).then(() => res.send('200'));
+        }
+
     }
 }

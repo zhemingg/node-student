@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.post('/api/student/:sid/section/:kid', enrollStudentInSection);
     app.get('/api/student/:sid/section', findSectionsForStudent);
     app.delete('/api/student/:sid/section/:kid', unenrollStudentInSection);
+    app.get('/api/student/:sid/course/:courseId/section/:kid', hasEnrollment);
 
     var sectionModel = require('../models/section/section.model.server');
     var enrollmentModel = require('../models/enrollment/enrollment.model.server');
@@ -12,7 +13,8 @@ module.exports = function (app) {
             const sectionId = req.params.kid;
             const enrollment = {
                 student: curUser._id,
-                section: sectionId
+                section: sectionId,
+                courseId: ''
             };
 
             sectionModel.findSectionById(sectionId)
@@ -21,6 +23,8 @@ module.exports = function (app) {
                         if (section.seats <= 0) {
                             res.json({error: 'No more space'});
                         } else {
+                            console.log(section);
+                            enrollment.courseId = section.courseId;
                             sectionModel
                                 .decrementSectionSeats(sectionId)
                                 .then(function () {
@@ -69,5 +73,20 @@ module.exports = function (app) {
         } else {
             res.json({error: 'Please log in'});
         }
+    }
+
+    function hasEnrollment(req, res) {
+        const sectionId = req.params.kid;
+        const studentId = req.params.sid;
+        const courseId = req.params.courseId;
+        const enrollment = {
+            student: studentId,
+            section: sectionId
+        };
+        enrollmentModel.hasEnrollmented(courseId)
+            .then(results => {
+                res.json(results);
+            });
+
     }
 }

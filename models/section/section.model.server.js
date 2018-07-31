@@ -27,7 +27,7 @@ function incrementSectionSeats(sectionId) {
 }
 
 function findSectionById (sectionId) {
-    return sectionModel.findById(sectionId);
+    return sectionModel.findOne({_id: sectionId});
 }
 
 function updateSection (newSection) {
